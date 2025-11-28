@@ -1,2 +1,5 @@
-node_modules
+certs/
+*.key
 *.pem
+*.crt
+node_modules/

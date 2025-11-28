@@ -11,5 +11,6 @@ RUN sed -i 's/\/\/ session\.customWSS = true;/session\.wss = "wss:\/\/"+window\.
 ENV PORT=8443
 
 EXPOSE 8443
-
+COPY menu.html /var/vdo/vdo.ninja/menu.html
+COPY camera.html /var/vdo/vdo.ninja/camera.html
 CMD ["node", "/var/vdo/webserver/server.js"]

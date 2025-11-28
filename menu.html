@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assign Camera</title>
+    <style>
+        body { background-color: #111; color: white; font-family: sans-serif; text-align: center; padding-top: 30px; }
+        h1 { margin-bottom: 20px; font-size: 22px; color: #ddd; }
+        p { color: #888; font-size: 14px; margin-bottom: 40px; }
+        
+        a {
+            display: block;
+            background-color: #222;
+            color: white;
+            text-decoration: none;
+            padding: 25px;
+            margin: 15px auto;
+            width: 80%;
+            max-width: 400px;
+            border-radius: 12px;
+            font-size: 24px;
+            border: 2px solid #444;
+            font-weight: bold;
+        }
+        
+        /* Different colors for different units so you don't mix them up */
+        .cam1 { border-color: #ff4444; color: #ffcccc; }
+        .cam2 { border-color: #44ff44; color: #ccffcc; }
+        .cam3 { border-color: #4444ff; color: #ccccff; }
+
+        a:hover { opacity: 0.8; transform: scale(1.02); }
+        
+        .sub { font-size: 13px; color: #777; display: block; margin-top: 5px; font-weight: normal; }
+    </style>
+</head>
+<body>
+
+    <h1>Assign this Device</h1>
+    <p>Tap the ID you want this phone to use.</p>
+
+    <a href="camera.html?id=cam1&facing=user" class="cam1">
+        🔴 Unit 1
+        <span class="sub">Front Camera • ID: cam1</span>
+    </a>
+
+    <a href="camera.html?id=cam2&facing=user" class="cam2">
+        🟢 Unit 2
+        <span class="sub">Front Camera • ID: cam2</span>
+    </a>
+
+    <a href="camera.html?id=cam3&facing=user" class="cam3">
+        🔵 Unit 3
+        <span class="sub">Front Camera • ID: cam3</span>
+    </a>
+
+</body>
+</html>

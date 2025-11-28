@@ -1,3 +1,27 @@
+## This fork is used to update the VDO.Ninja setup for the dance performance called "TriluReelu - The body in Reel time"
+The show requires the use of the amazing VDO.Ninja running locally on a dedicated server, because it uses smartphone camera streams, and VDO was the best solution we could find for low latency on WIFI.
+
+## Guide intended to be used for the show:
+
+### Clone THIS repository:
+git clone https://github.com/endimionzf/offline_deployment.git
+
+### Enter the new folder:
+cd offline_deployment
+
+### Create a folder for your certificates:
+mkdir certs
+
+### Generate the certificate and key using this single command:
+openssl req -nodes -new -x509 -keyout certs/private.key -out certs/certificate.crt -subj "/C=US/ST=State/L=City/O=Company/CN=localhost"
+
+### Build the Docker Image:
+docker build -t vdoninja .
+
+### Run the Container:
+docker run -d --mount type=bind,source="$(pwd)"/certs,target=/var/certs -e KEY_PATH=/var/certs/private.key -e CERT_PATH=/var/certs/certificate.crt -p 8443:8443 vdoninja
+
+
 ## Guide + code to run VDO.Ninja without Internet on a local network
 
 This guide was tested on a Raspberry Pi with a clean RPI OS installed ([the image of which is provided if desired](https://github.com/steveseguin/offline_deployment#rpi-provided-image-option))

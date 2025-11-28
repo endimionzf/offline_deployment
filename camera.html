@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Smart Cam</title>
+    <style>
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: #000; overflow: hidden; }
+        
+        iframe {
+            width: 100vw;
+            height: 100vh;
+            border: none;
+            display: block;
+            z-index: 1; 
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100; 
+            opacity: 1; 
+            transition: opacity 0.5s ease-in-out;
+        }
+        
+        button {
+            background: rgba(255, 255, 255, 0.4);
+            border: 2px solid rgba(255,255,255,0.6);
+            padding: 15px 20px;
+            font-size: 24px;
+            border-radius: 50px;
+            margin-left: 10px;
+            cursor: pointer;
+            color: white;
+            pointer-events: auto;
+        }
+        
+        .hidden { opacity: 0 !important; pointer-events: none; }
+    </style>
+</head>
+<body>
+
+    <iframe id="camFrame" allow="camera; microphone; autoplay" onload="setupTapListener()"></iframe>
+
+    <div id="ui" class="controls">
+        <button onclick="toggleMirror()">↔️</button>
+        <button onclick="goFull()">⛶</button>
+    </div>
+
+    <script>
+        // --- CONFIGURATION LOGIC ---
+        
+        // 1. Get the parameters from the Browser URL (e.g., ?id=cam1&face=back)
+        const urlParams = new URLSearchParams(window.location.search);
+        
+        // 2. Set Defaults (if no parameters provided)
+        const camID = urlParams.get('id') || 'myphone';      // Default name
+        const facing = urlParams.get('facing') || 'user';    // Default to Selfie
+        const quality = urlParams.get('q') || '0';           // Default to Max Quality
+        
+        // 3. Construct the VDO.Ninja URL
+        const vdoUrl = `./?push=${camID}&ad=0&quality=${quality}&autostart&hideheader&chat=false&hidebuttons&hideclose&handsfree&cleanoutput&cover&facing=${facing}`;
+        
+        // 4. Inject it into the iframe
+        document.getElementById('camFrame').src = vdoUrl;
+
+        // --- INTERFACE LOGIC (Same as before) ---
+
+        var isMirrored = false;
+        var hideTimer;
+        var ui = document.getElementById('ui');
+
+        function showControls() {
+            ui.classList.remove('hidden');
+            clearTimeout(hideTimer);
+            hideTimer = setTimeout(() => { ui.classList.add('hidden'); }, 5000);
+        }
+
+        function setupTapListener() {
+            var frame = document.getElementById('camFrame');
+            try {
+                var innerDoc = frame.contentWindow.document;
+                innerDoc.body.addEventListener('click', showControls);
+                innerDoc.body.addEventListener('touchstart', showControls);
+            } catch (e) { console.log(e); }
+        }
+        
+        showControls();
+
+        function toggleMirror() {
+            var frame = document.getElementById('camFrame');
+            isMirrored = !isMirrored;
+            frame.style.transform = isMirrored ? "scaleX(-1)" : "none";
+            showControls();
+        }
+
+        function goFull() {
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen();
+            }
+            showControls();
+        }
+    </script>
+</body>
+</html>
