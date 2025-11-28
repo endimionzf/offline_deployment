@@ -49,7 +49,9 @@ Since we are using "fake" (self-signed) security certificates, OBS will block th
 5. In the settings window that pops up: URL: `https://localhost:8443/?view=cam1&buffer=0&videobitrate=6000&codec=h264&stats`
 
 `&stats` to monitor statistics for the connection to get the lowest latency. After testing is done, it should be removed from the URL.
+
 `&videobitrate` - up to 10000. We change the value in the URL to find the best performance/speed.
+
 `&codec` - h264, VP8, VP9, AV1 We change the value in the URL to find the best performance/speed.
 
 6. Click OK.
