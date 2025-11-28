@@ -4,22 +4,22 @@ The show requires the use of the amazing VDO.Ninja running locally on a dedicate
 ## Guide intended to be used for the show:
 
 ### Clone THIS repository:
-git clone https://github.com/endimionzf/offline_deployment.git
+```git clone https://github.com/endimionzf/offline_deployment.git```
 
 ### Enter the new folder:
-cd offline_deployment
+```cd offline_deployment```
 
 ### Create a folder for your certificates:
-mkdir certs
+```mkdir certs```
 
 ### Generate the certificate and key using this single command:
-openssl req -nodes -new -x509 -keyout certs/private.key -out certs/certificate.crt -subj "/C=US/ST=State/L=City/O=Company/CN=localhost"
+```openssl req -nodes -new -x509 -keyout certs/private.key -out certs/certificate.crt -subj "/C=US/ST=State/L=City/O=Company/CN=localhost"```
 
 ### Build the Docker Image:
-docker build -t vdoninja .
+```docker build -t vdoninja .```
 
 ### Run the Container:
-docker run -d --mount type=bind,source="$(pwd)"/certs,target=/var/certs -e KEY_PATH=/var/certs/private.key -e CERT_PATH=/var/certs/certificate.crt -p 8443:8443 vdoninja
+```docker run -d --mount type=bind,source="$(pwd)"/certs,target=/var/certs -e KEY_PATH=/var/certs/private.key -e CERT_PATH=/var/certs/certificate.crt -p 8443:8443 vdoninja```
 
 
 ## Guide + code to run VDO.Ninja without Internet on a local network
