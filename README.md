@@ -1,25 +1,60 @@
 ## This fork is used to update the VDO.Ninja setup for the dance performance called "TriluReelu - The body in Reel time"
 The show requires the use of the amazing VDO.Ninja running locally on a dedicated server, because it uses smartphone camera streams, and VDO was the best solution we could find for low latency on WIFI.
 
-## Guide intended to be used for the show:
+## Guide to install VDO.Ninja for the show:
 
 ### Clone THIS repository:
-```git clone https://github.com/endimionzf/offline_deployment.git```
+`git clone https://github.com/endimionzf/offline_deployment.git`
 
 ### Enter the new folder:
-```cd offline_deployment```
+`cd offline_deployment`
 
 ### Create a folder for your certificates:
-```mkdir certs```
+`mkdir certs`
 
 ### Generate the certificate and key using this single command:
-```openssl req -nodes -new -x509 -keyout certs/private.key -out certs/certificate.crt -subj "/C=US/ST=State/L=City/O=Company/CN=localhost"```
+`openssl req -nodes -new -x509 -keyout certs/private.key -out certs/certificate.crt -subj "/C=US/ST=State/L=City/O=Company/CN=localhost"`
 
 ### Build the Docker Image:
-```docker build -t vdoninja .```
+`docker build -t vdoninja .`
 
 ### Run the Container:
-```docker run -d --mount type=bind,source="$(pwd)"/certs,target=/var/certs -e KEY_PATH=/var/certs/private.key -e CERT_PATH=/var/certs/certificate.crt -p 8443:8443 vdoninja```
+`docker run -d --mount type=bind,source="$(pwd)"/certs,target=/var/certs -e KEY_PATH=/var/certs/private.key -e CERT_PATH=/var/certs/certificate.crt -p 8443:8443 vdoninja`
+
+### Start VDO.Ninja on smartphones:
+1. On the server open cmd and type 'ipconfig'
+2. Find localhost IPv4 address
+
+3. Replace your address like below:
+Example: `https://localhost:8443/menu.html` is `https://192.168.0.1:8443/menu.html`
+4. open the link in Chrome on smartphones. Proceed with unsafe certificates. Choose the ID for the camera. Enter fullscreen.
+
+## OBS Studio workaround for local certificates:
+
+Since we are using "fake" (self-signed) security certificates, OBS will block the video by default (you will just see a black screen). We have to launch OBS in a special way to tell it to ignore the security warning.
+
+1. Close OBS Studio if it is open.
+2. Find your OBS Studio shortcut on your Desktop.
+3. Right-click the shortcut and select Properties.
+4. Look for the Target box. It will look something like this: "C:\Program Files\obs-studio\bin\64bit\obs64.exe"
+5. Add this text to the very end (make sure there is a space after the quote marks): --ignore-certificate-errors (Note the double dash -- at the start)
+6. The full text should look like this: "C:\Program Files\obs-studio\bin\64bit\obs64.exe" --ignore-certificate-errors
+7. Click Apply and then OK.
+
+### In OBS
+1. Double-click your new modified shortcut to open OBS.
+2. In the Sources box (bottom), click the + (Plus) icon.
+3. Select Browser.
+4. Name it "Camera 1" and click OK.
+5. In the settings window that pops up: URL: `https://localhost:8443/?view=cam1&buffer=0&videobitrate=6000&codec=h264&stats`
+
+`&stats` to monitor statistics for the connection to get the lowest latency. After testing is done, it should be removed from the URL.
+`&videobitrate` - up to 10000. We change the value in the URL to find the best performance/speed.
+`&codec` - h264, VP8, VP9, AV1 We change the value in the URL to find the best performance/speed.
+
+6. Click OK.
+7. Repeat for camera 2 and camera 3, replacing `view=cam1` with `view=cam2` and `view=cam3`.
+8. Test, test, test.
 
 
 ## Guide + code to run VDO.Ninja without Internet on a local network
